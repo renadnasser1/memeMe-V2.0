@@ -13,7 +13,6 @@ import UIKit
 class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate{
     
     //MARK: - Outlet
-
     
     @IBOutlet weak var imgeView: UIImageView!
     
@@ -23,7 +22,7 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
     
     @IBOutlet weak var bottomTextFiled: UITextField!
     
-    @IBOutlet weak var topToolbar: UIToolbar!
+    @IBOutlet weak var navBaer: UINavigationItem!
     
     @IBOutlet weak var bottomToolbar: UIToolbar!
     
@@ -39,7 +38,7 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSAttributedString.Key.strokeWidth:  -4,
     ]
-
+    
     var memes: [Meme]! {
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
@@ -80,7 +79,7 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
     }
     
     //MARK: - Pick An Image From Album
-        @IBAction func pickAnImageFromAlbum(_ sender:Any) {
+    @IBAction func pickAnImageFromAlbum(_ sender:Any) {
         
         pickFromSource(.photoLibrary)
     }
@@ -188,7 +187,7 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
     
     func unsubscribeFromKeyboardNotifications() {
         
-       // Remove observer for all subscribers at once
+        // Remove observer for all subscribers at once
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -199,14 +198,6 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
         let image = generateMemedImage()
         let controller = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         
-        controller.completionWithItemsHandler = { [weak self] type, completed, items, error in
-
-            if completed {
-                self?.save()
-            }
-
-            controller.dismiss(animated: true, completion: nil)
-        }
         self.present(controller, animated: true, completion: save)
     }
     
@@ -223,10 +214,6 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         appDelegate.memes.append(meme)
-        print("save")
-        print("num of ")
-        print(appDelegate.memes.count)
-    
         
         
     }
@@ -251,11 +238,19 @@ class addMemeVC: UIViewController , UIImagePickerControllerDelegate, UINavigatio
     
     // to Hide and show top and bottom bars
     func hideTopAndBottomBars(_ hide: Bool) {
-        topToolbar.isHidden=hide
+        
+        navigationController?.setNavigationBarHidden(hide, animated: true)
         bottomToolbar.isHidden=hide
     }
     
     
+    //MARK: - Cancel
+    
+    @IBAction func cancel(){
+        navigationController?.popViewController(animated: true)
+        
+        dismiss(animated: true, completion: nil)
+    }
     
 }
 

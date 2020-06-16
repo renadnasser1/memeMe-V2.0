@@ -1,5 +1,5 @@
 //
-//  TableViewVC.swift
+//  SentMemesTableViewVC.swift
 //  memeMeV2.0
 //
 //  Created by Renad nasser on 13/06/2020.
@@ -9,13 +9,15 @@
 import Foundation
 import UIKit
 
-// MARK: - TableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate
+// MARK: - SentMemesTableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
-class TableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SentMemesTableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     //MARK: -Outlet
     
     @IBOutlet var tableView: UITableView!
+    
     // MARK: -Properties
+    
     // This is an array of meme instances
     var memes: [Meme]! {
         let object = UIApplication.shared.delegate
@@ -23,7 +25,7 @@ class TableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         return appDelegate.memes
     }
     
-    //MARK: -Function,
+    //MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,10 +33,9 @@ class TableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
     }
     
     
-    //Table View Data Source
+    //MARK: - Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(memes.count)
         return self.memes.count
     }
     
@@ -46,10 +47,20 @@ class TableViewVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         // Set the name and image
         cell.textLabel?.text = meme.topText+" "+meme.bottomText
         cell.imageView?.image = meme.memedImage
-        print("Table view reuseable cell invoked")
         return cell
     }
-
-
+    
+    
+    //MARK: - send detial to MemeCustomCell
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let detailController = self.storyboard!.instantiateViewController(withIdentifier: "MemeDetailVC") as! MemeDetailVC
+        detailController.meme = self.memes[(indexPath as NSIndexPath).row]
+        
+        self.navigationController!.pushViewController(detailController, animated: true)
+        
+    }
+    
+    
 }
 
